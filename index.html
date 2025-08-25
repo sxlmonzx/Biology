@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BioQuiz</title>
+    <link rel="icon" type="image" href="C:\Users\USER\Downloads\ChatGPT Image Aug 25, 2025, 07_36_27 PM.png">
+</head>
+<style>
+
+  body{
+    background-color: #8990AD;
+  }
+
+  .header{
+    margin-top: -30px;
+    background-color: #1DFF00;
+  }
+
+  h1{
+    margin-left: 825px;
+    font-weight: bold;
+  }
+
+  .startScreen{
+    margin-left: 905px;
+  }
+  .nav-buttons{
+    margin-left: 850px;
+  }
+
+  .resultScreen{
+    margin-left: 885px;
+  }
+
+  .choices{
+    margin-left: 20px;
+  }
+
+  h3 {
+    background-color: white;
+    margin-left: 20px;
+    font-size: 10;
+  }
+
+@media(max-width: 480px){
+
+  body{
+    background-color: #8990AD;
+  }
+
+  .header{
+    margin-top: -10px;
+    background-color: #1DFF00;
+  }
+
+  h1{
+    margin-left: 100px;
+    font-weight: bold;
+  }
+
+  .startScreen{
+    margin-left: 120px;
+  }
+  .nav-buttons{
+    margin-left: 120px;
+  }
+
+  .resultScreen{
+    margin-left: 885px;
+  }
+
+  .choices{
+    margin-left: 5px;
+  }
+
+  h3 {
+    background-color: white;
+    margin-left: 5px;
+    font-size: 10;
+  }
+
+}
+
+</style>
+<body>
+
+ <div class="header"><h1>HormoneQuiz</h1></div>
+
+ <div id="startScreen" class="startScreen">
+    <button type="button" onclick="start()">เริ่ม</button>
+  </div>
+
+    <div id="quizScreen">
+    <h3 id="question"></h3>
+    <div id="choices" class="choices"></div>
+    <p id="check"></p>
+    
+    <div class="nav-buttons">
+      <button onclick="prevQuestion()">ข้อก่อนหน้า</button>
+      <button onclick="nextQuestion()">ข้อถัดไป</button>
+    </div>
+    </div>
+
+ <div id="resultScreen" class="resultScreen">
+    <h3 id="result"></h3>
+    <div id="userAnswers"></div>
+    <button onclick="location.reload()">ลองอีกครั้ง</button>
+  </div>
+
+<script>
+  const questions = [
+    "1. จากการทดลองส่องเซลล์ยูคาริโอตด้วยกล้องจุลทรรศน์อิเล็กตรอนแบบส่องผ่าน (TEM) พบออร์แกเนลชนิด RER และ Golji complex เป็นจำนวนมาก จากข้อมูลเซลล์นี้ควรจะสร้างฮอร์โมนชนิดใด (แบ่งชนิดตามโครงสร้างทางเคมี)",
+    "2.ฮอร์โมนชนิดหนึ่งมีสมบัติละลายได้ดีในไขมันสามารถผ่านเยื่อหุ้มเซลล์ที่มีองค์ประกอบเป็น Phospholipid bilayer และเข้าไปจับกับตัวรับภายในเซลล์ได้ ฮอร์โมนชนิดนี้คือชนิดใด(แบ่งชนิดตามสมบัติทางเคมี)",
+    "3.ฮอร์โมนชนิดหนึ่งเกิดจากกรดอะมิโนมาเชื่อมต่อกันแล้วตัดหมู่คาร์บอกซิลออกมีสมบัติการละลายน้ำได้ดีฮอร์โมนในชนิดนี้จะมีระดับฮอร์โมนที่สูงต่ำไม่แน่นอน ฮอร์โมนชนิดนี้คือฮอร์โมนชนิดใด(แบ่งชนิดตามสมบัติทางเคมี)",
+    "4.ฮอร์โมนหนึ่งสร้างจากสมองส่วนไฮโพทาลามัส สามารถกระตุ้นให้ต่อมใต้สมองส่วนหน้าสร้างฮอร์โมนที่ชื่อว่า Gonadotrophin ประกอบไปด้วย FSH และ LH ซึ่งมีผลต่ออวัยวะเป้าหมายในระบบสืบพันธ์ ฮอร์โมนชนิดนี้คืออะไร",
+    "5.อวัยวะ A หลั่งฮอร์โมน B มากกว่าปกติ ส่งผลให้การดูดกลับแคลเซียมที่ใตลดลงAและB คืออะไร",
+    "6.ฮอร์โมนหนึ่งสร้างและหลั่งจากต่อมใต้สมองส่วนหน้า มีผลกระตุ้นให้เกิดการตกไข่ในเพศหญิง ฮอร์โมนชนิดนี้คืออะไร",
+    "7.ฮอร์โมนหนึ่งมีผลต่อเซลล์เป้าหมายโดยกระตุ้นการดูดกลับน้ำบริเวณท่อขดส่วนปลายและท่อรวม ฮอร์โมนนี้คืออะไร",
+    "8.สร้างจากสมองส่วนที่ควบคุมดุลยภาพในร่างกาย หลั่งจากต่อมใต้สมองส่วนหลังมีผลทำให้กล้ามเนื้อที่มดลูกบีบตัวตระตุ้นการคลอดและกระตุ้นการหลั่งน้ำนม จากข้อมูลข้างต้นคือฮอร์โมนใด",
+    "9.ในกระบวนการสลายไกลโคเจน (glycogenolysis) เป็นกระบวนการที่ร่างกายมีความจำเป็นที่จะต้องใช้พลังงานหรือต้องการรักษาระดับน้ำตาลในเลือด โดยการไปสลายสารชนิดหนึ่งที่ตับ กระบวนการนี้สลายสารชนิดใดออกมาเป็นพลังงานและใช้ฮอร์โมนใดตามลำดับ",
+    "10.การเกิด metamorphosis ในลูดอ๊อดเกี่ยวข้องกับฮอร์โมนใดมากที่สุด",
+    "11.ต่อมไร้ท่อใดสร้างฮอร์โมน lnsulin และ Glucagon และสร้างบริเวณใดของต่อมไรท่อตามลำดับ",
+    "12.เบต้าเซลล์ที่อยู่ในตับอ่อน สร้างฮอร์โมนใดมาควบคุมระดับน้ำตาลในเลือด",
+    "13.อัลฟ่าเซลล์ที่อยู่ในตับอ่อน สร้างฮอร์โมนใดมาควบคุมระดับน้ำตาลในเลือด",
+    "14.ฮอร์โมนที่สร้างจากต่อมไร้ต่อจะมีลักษณะอย่างไร",
+    "15.ครูชีววิทยาใส่แว่นท่านหนึ่ง อดข้าวนาน 24 ชั่วโมงเพื่อตั้งใจจะไปกินบุฟเฟ่ร้านดังย่านสะพานปลาต่อมานักเรียนชายใส่แว่นคนหนึ่งได้ขอเจาะเลือดครูก่อนกินบุฟเฟ่และหลังกินบุฟเฟ่ 1 ชั่วโมง จะพบฮอร์โมนใดในเลือดตามลำดับ",
+    "16.ครูเคมีราชาแห่งนรกท่านหนึ่ง ไปงานเลี้ยงสังสรรค์และได้ดื่มเครื่องดื่มแอลกอฮอล์เข้าไปหลังจากดื่มเข้าไปพบกว่ามีการอาการปวดปัสสาวะบ่อยขึ้นและปัสสาวะมากขึ้น แอลกฮอล์มีผลยั้บยั้งฮอร์โมนใดและต่อมไร้ท่อใดที่เป็นไปได้มากที่สุดตามลำดับ",
+    "17.นักเรียนชายห้อง6/6 คนหนึ่งกำลังเครียดกับการสอบฟิสิกส์คาบต่อไป ต่อมาเขาเห็นครูฟิสิกส์สาวแสนใจดีวิ่งมาด้วยอาการตกใจและยกโต๊ะขนาดใหญ่ออกมาจากห้องข้างๆเพราะเกิดไฟไหม้ในห้อง ข้อใดบอกฮอร์โมนที่ร่างกายสองคนนี้หลั่งตามลำดับ",
+    "18.ฮอร์โมนใดเป็น antagonistic hormone กัน",
+    "19.ฮอร์โมนใดมีฤทธิ์คล้ายมอร์ฟีน",
+    "20.เซลล์ประสาทหนึ่งส่งฮอร์โมนที่สร้างจากสมองส่วนไอโพทาลามัสมาหลั่งที่ต่อมใดและเป็นเซลล์ประสาทชนิดใดตามลำดับ",
+    "21.ฮอร์โมนใดบ้างที่สร้างจากต่อมใต้สมองส่วนหน้าและไปมีผลที่เซลล์เป้าหมายให้เกิดการตอบสนองโดยไม่ต้องสร้างฮอร์โมนใหม่อีกชุด",
+    "22.Gonadotrophin เป็นฮอร์โมนที่สร้างจากต่อมใต้สมองส่วนหน้า มีผลต่ออวัยวะใดบ้าง",
+    "23.CRH เป็นฮอร์โมนที่สร้างจากไฮโพทาลามัสมีผลไปกระตุ้นการสร้างฮอร์โมนใดที่ต่อมไร้ท่อใดตามลำดับ",
+  ];
+
+  const choices = [
+    ["1) steroid hormone" , "2) peptide hormone" , "3) hypothalamic hormone" , "4) amine hormone"],
+    ["1)steroid hormone" , "2)neurotransmitter" , "3)amine hormone" , "4)peptide hormone"],
+    ["1)protein hormone" , "2)steroid hormone" , "3)Lipid-soluble hormone" , "4)amine hormone"],
+    ["1)TRH" , "2)LH" , "3)FSH" , "4)GnRH"],
+    ["1)ต่อมหมวกไตชั้นนอกและคอลติซอล" , "2)ต่อมไทรอยด์และแคลซิโทนิน" , "3)ต่อมพาราไทรอยด์และแคลซิโทนิน" , "4)ตับอ่อนและอินซูลีน"],
+    ["1)FSH" , "2)LH" , "3)oxytocin" , "4)Epinephrine"],
+    ["1)Mineralocorticoid" , "2)Glucorticoid" , "3)ADH" , "4)Thyroxine"],
+    ["1)Prolactin" , "2)Oxytocin" , "3)Vasopressin" , "4)Progesterone"],
+    ["1)glycogen และ glucagon" , "2)lipid และ Insulin" , "3)lipid และ cortisol" , "4)protein และ parathormone"],
+    ["1)epinephrine" , "2)thyroxine" , "3)growh hormone" , "4)oxytocin"],
+    ["1)Pancreas และ Spleen" , "2)Thyroid gland และ Follicular cell" , "3)Pancreas และ lslet of Langerhans" , "4)Adrenal gland และ Adrenal cortex"],
+    ["1)Cortisol" , "2)Calcitonin" , "3)Insulin" , "4)Glucagon"],
+    ["1)Glucagon" , "2)Vasopressin" , "3)Insulin" , "4)Aldosterrone"],
+    ["1)ส่งผ่านกระแสเลือด และ คุมการตอบสนองเร็วมีผลนาน" , "2)ส่งผ่านการsynapse และ คุมการตอบสนองช้ามีผลนาน" , "3)ส่งผ่านกระแสเลือด และ คุมการตอบสนองช้ามีผลนาน" , "4)ส่งผ่านการsynapse และ คุมการตอบสนองเร็วมีผลไม่นาน"],
+    ["1)Insulin และ Glucagon" , "2)lnsulin และ Glucocorticoid" , "3)Glucagon และ Insulin" , "4)Calcitonin และ parathormone"],
+    ["1)ADH และ ต่อมใต้สมองส่วนหน้า" , "2)Insulin และ ต่อมใต้สมองส่วนหลัง" , "3)Vasopressin และ ต่อมใต้สมอมส่วนหลัง" , "4)Thyroxin และ ต่อมไทรอยด์"],
+    ["1)Cortisol และ Epinephrine" , "2)Epinephrine และ ADH" , "3)Parathormone และ Aldosterone" , "4)Epinephrine และ Cortisol"],
+    ["1)Epinephrine และ Norepinephrine" , "2)Calcitonin และ Parathormone" , "3)FSH และ LH" , "4)Oxytocin และ prolactin"],
+    ["1)Melatonin" , "2)Endorphin" , "3)hCG" , "4)Gastrin"],
+    ["1)ต่อมใต้สมองส่วนหลัง และ Unipolar neuron" , "2)ต่อมใต้สมองส่วนหน้า และ Pseudounipolar nuron" , "3)ต่อมใต้สมองส่วนหลัง และ bipolar neuron" , "4)ต่อมใต้สมองส่วนหน้า และ Sensory"],
+    ["1)GN และ TSH" , "2)ACTH และ TSH" , "3)Prolactin และ GN" , "4)Prolactin และ TSH"],
+    ["1)Testis และ Adrenal cortex" , "2)Thyroid gland และ  Adrenal cortex" , "3)Testis และ Ovary" , "4)Thyroid gland และ Ovary"],
+    ["1)ACTH และ ต่อมใต้สมองส่วนหลัง" , "2)GN และต่อมใต้สมองส่วนหน้า" , "3)TSH และ ต่อมใต้สมองส่วนหลัง" , "4)ACTH และ ต่อมใต้สมองส่วนหน้า"], 
+  ];
+
+  const correctAnswers = [2,1,4,4,2,2,3,2,1,2,3,3,1,3,3,3,1,2,2,1,3,3,4];
+
+  let currentQuestion = 0;
+  let score = 0;
+
+  const userAnswers = Array(questions.length).fill(0);
+
+  function start() {
+    document.getElementById("startScreen").classList.add("hidden");
+    document.getElementById("quizScreen").classList.remove("hidden");
+    showQuestion();
+  }
+
+  function showQuestion() {
+    document.getElementById("question").innerText = questions[currentQuestion];
+    const choicesDiv = document.getElementById("choices");
+    choicesDiv.innerHTML = "";
+
+    choices[currentQuestion].forEach((choice, index) => {
+      const button = document.createElement("button");
+      button.innerText = choice;
+      button.onclick = () => checkAnswer(index + 1);
+      choicesDiv.appendChild(button);
+
+      button.style.display = "block";  
+      button.style.margin = "5px 0"; 
+
+      if (userAnswers[currentQuestion] !== 0) {
+      button.disabled = true;
+     if (userAnswers[currentQuestion] === index + 1) {
+        button.style.backgroundColor = "#FFF35E"; 
+      }
+    }
+
+    });
+    
+    const checkEl = document.getElementById("check");
+    checkEl.innerText = "";
+
+
+    if (userAnswers[currentQuestion] !== 0) {
+    checkEl.innerText =
+    userAnswers[currentQuestion] === correctAnswers[currentQuestion]
+      ? "ถูกต้อง"
+      : "ผิด";
+  }
+}
+
+  function checkAnswer(answer) {
+    if (userAnswers[currentQuestion] === 0){
+    userAnswers[currentQuestion] = answer;
+    showQuestion();
+    }
+}
+
+  function nextQuestion() {
+    if (currentQuestion < questions.length - 1) {
+        currentQuestion++;
+        showQuestion();
+    } else {
+        showResult();
+      }
+}
+
+ function prevQuestion() {
+      if (currentQuestion > 0) {
+        currentQuestion--;
+        showQuestion();
+      }
+    }
+
+  function showResult(){
+    let score = 0;
+    userAnswers.forEach((ans, i) => {
+      if (ans === correctAnswers[i]) score++;
+    });
+
+    document.getElementById("quizScreen").classList.add("hidden");
+    document.getElementById("resultScreen").classList.remove("hidden");
+    document.getElementById("result").innerText ="คุณทำคะแนนไป " + score + "เต็ม23";
+
+    printUserAnswers();
+  }
+
+</script>
+
+</body>
+
+</html>
