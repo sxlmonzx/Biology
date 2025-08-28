@@ -230,9 +230,11 @@
 
       if (userAnswers[currentQuestion] !== 0) {
       button.disabled = true;
-     if (userAnswers[currentQuestion] === index + 1) {
+      if (userAnswers[currentQuestion] === index + 1) {
         button.style.backgroundColor = "#FFF35E"; 
       }
+       if (correctAnswers[currentQuestion] === index + 1) {
+    button.style.backgroundColor = "#90EE90";
     }
 
     });
@@ -284,13 +286,12 @@
 
     printUserAnswers();
   }
-
 </script>
 
 </body>
 
-
 </html>
+
 
 
 
