@@ -199,9 +199,10 @@
     ["1)TSH และ Thyroid hormone" , "2)PIH และ Prolactin" , "3)PIH และ Oxytocin" , "4)PIH และ GH"],
     ["1)hCG" , "2)LH" , "3)FSH" , "4)Estrogen"],
     ["1)สร้างจากรกกระตุ้นCorpus luteum ให้สร้างฮอร์โมนเพศต่อไป" , "2)สร้างจากCorpus luteum ไปคงสภาพเยื่อบุโพรงมดลูก" , "3)สร้างจากรกกระตุ้นเอ็มบริโอ้ให้หยุดการเจริญเติบโต" , "4)สร้างจากCorpus luteum ไปทำให้เกิดการปฏิสนธิ"],
+    
   ];
 
-  const correctAnswers = [2,1,4,4,2,2,3,2,1,2,3,3,1,3,3,3,1,2,2,1,3,3,4,3,2,1,1,2,1,4,1,1,2,3,3,1,2,1,1];
+  const correctAnswers = [2,1,4,4,2,2,3,2,1,2,3,3,1,3,3,3,1,2,2,1,3,3,4,3,2,1,1,2,1,4,1,1,3,2,3,3,1,2,1,1];
 
   let currentQuestion = 0;
   let score = 0;
@@ -239,7 +240,7 @@
         button.style.backgroundColor = "#FFF35E"; 
       }
 
-    };
+    });
     
     const checkEl = document.getElementById("check");
     checkEl.innerText = "";
@@ -293,6 +294,7 @@
 </body>
 
 </html>
+
 
 
 
